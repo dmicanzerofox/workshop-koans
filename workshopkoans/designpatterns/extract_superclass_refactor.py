@@ -16,8 +16,7 @@ class Employee(Billable):
 
 
 def pay(amount):
-    assert amount == 1000
-
+    pass
 
 def pay_worker(employee):
     assert isinstance(employee, Billable)

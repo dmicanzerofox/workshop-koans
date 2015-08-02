@@ -1,3 +1,6 @@
 from django.shortcuts import render
 
-# Create your views here.
+
+def correct_types(request):
+    import ipdb; ipdb.set_trace();
+    pass

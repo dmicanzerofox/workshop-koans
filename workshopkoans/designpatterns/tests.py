@@ -1,6 +1,8 @@
 from django.test import TestCase
 from .dependency_injection_refactor import PeopleRetriever, BackendBase
 from .extract_superclass_refactor import pay_worker
+from .object_composition_design_pattern import \
+    Airplane, REALLY_COMPLICATED_FLIGHT, Bird, Duck
 
 
 class DesignPatternsRefactoringTestCase(TestCase):
@@ -34,8 +36,20 @@ class DesignPatternsRefactoringTestCase(TestCase):
         self.assertIsInstance(retriever.connection, MockDbBackend)
         self.assertEqual(retriever.get_people(), BackendBase.PEOPLE_LIST)
 
-    def test_composable_architecture_design_pattern(self):
-        self.fail()
+    def test_object_composition_design_pattern(self):
+        """
+        Pretend you work for a robot bird company which has created
+        a an extremely complex `fly` function for its robots.
+
+        Management has decided to enter the aerospace market.
+
+        They would like to use the same fly method that powers the
+        birds to power their airplanes.  Apply object composition
+        to accomplish this.
+        :return:
+        """
+        airplane = Airplane()
+        self.assertEqual(airplane.fly(), REALLY_COMPLICATED_FLIGHT)
 
     def test_encapsulation_design_pattern(self):
         self.fail()
