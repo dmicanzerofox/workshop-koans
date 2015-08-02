@@ -1,3 +1,5 @@
 from django.shortcuts import render
 
-# Create your views here.
+
+def moneyadder(request):
+    import ipdb; ipdb.set_trace();

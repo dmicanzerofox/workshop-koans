@@ -16,8 +16,10 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from validation import urls as validation_urls
+from restapi import urls as api_urls
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^validation/', include(validation_urls, namespace='validation')),
+    url(r'^api/', include(api_urls, namespace='api')),
 ]
