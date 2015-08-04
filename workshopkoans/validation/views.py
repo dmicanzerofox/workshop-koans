@@ -1,4 +1,5 @@
 import datetime
+from django.http import HttpResponse
 from django.shortcuts import render
 
 
@@ -16,10 +17,12 @@ def create_widget_view(request):
 
     # YOUR CODE HERE
 
-    _create_widget(name, size, weight_lbs, manufactured_date)
+    return HttpResponse(
+        _create_widget(name, size, weight_lbs, manufactured_date)
+    )
 
 
-def _create_widget(name, size, weight_lbs, manufactured_date):
+def _create_widget(name, size, weight_lbs, manufactured_date, color=None):
     """
     Saves a widget to the db.
 
@@ -36,3 +39,10 @@ def _create_widget(name, size, weight_lbs, manufactured_date):
     assert total_shipping_weight == 210
     today = datetime.date.today()
     days_old = (manufactured_date - today).days
+    return 'success'
+
+
+def unicode_test(request):
+    equation = request.POST['messed_up_equation']
+    # convert the iso-8859-2 string to utf-8
+    return HttpResponse(equation)
