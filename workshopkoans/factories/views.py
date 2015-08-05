@@ -1,7 +1,7 @@
+from abc import abstractmethod, ABCMeta
 import json
 from django.http import HttpResponse
 from django.shortcuts import render
-
 
 
 def post_retriever(request):
@@ -24,6 +24,7 @@ def post_retriever(request):
         json.dumps(post), content_type='application/javascript')
     return response
 
+
 def api_get_tweet_from_id(id):
     """
     Do not change
@@ -33,6 +34,7 @@ def api_get_tweet_from_id(id):
     """
     # make network call
     return {'tweet': id}
+
 
 def api_get_facebook_post_by_id(id):
     """
@@ -48,8 +50,18 @@ def api_get_facebook_post_by_id(id):
 def get_network_api_factory(network):
     pass
 
+
+class NetworkAPIBase(object):
+    __metaclass__ = ABCMeta
+
+    @abstractmethod
+    def get_post(self, post_id):
+        pass
+
+
 class FBPostAPI(object):
     pass
+
 
 class TwitterTweetAPI(object):
     pass
