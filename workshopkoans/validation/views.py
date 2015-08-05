@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 
+EXPECTED_ERROR_MESSAGE_TEMPLATE = 'Error: Missing Fields: {}'
+
 def create_widget_view(request):
     REQUIRED_PARAMS = (
         'name',
@@ -39,6 +41,8 @@ def _create_widget(name, size, weight_lbs, manufactured_date, color=None):
     assert total_shipping_weight == 210
     today = datetime.date.today()
     days_old = (manufactured_date - today).days
+    if color:
+        assert color == 'blue'
     return 'success'
 
 
@@ -46,3 +50,11 @@ def unicode_test(request):
     equation = request.POST['messed_up_equation']
     # convert the iso-8859-2 string to utf-8
     return HttpResponse(equation)
+
+
+def utc_conversion_test(request):
+    manufactured = request.POST['manufactured_datetime']
+    #  YOUR CONVERSION CODE HERE
+    # http://pytz.sourceforge.net/
+    utc_manufactured = ''
+    return HttpResponse(utc_manufactured)

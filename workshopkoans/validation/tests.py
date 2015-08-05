@@ -1,9 +1,10 @@
 # coding=utf-8
 from django.core.urlresolvers import reverse
 from django.test import TestCase
+from validation.views import EXPECTED_ERROR_MESSAGE_TEMPLATE
 
 
-class ValidationKoansTestCase(TestCase):
+class ValidationTypesTestCase(TestCase):
 
     def test_validation_on_correct_types(self):
         """
@@ -23,22 +24,18 @@ class ValidationKoansTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content, 'success')
 
-    def test_validation_of_missing_params(self):
-        """
-        Modify the view to handle detecting when parameters are absent
-        When a parameter is absent an HttpResponse should be returned
-        of form EXPECTED_ERROR_MESSAGE_TEMPLATE.
+class ValidationMissingParamsTestCase(TestCase):
+    """
+    Modify the view to handle detecting when parameters are absent
+    When a parameter is absent an HttpResponse should be returned
+    of form EXPECTED_ERROR_MESSAGE_TEMPLATE.
 
-        All fields should be ordered alpha, make requests with each field
-        missing and assert that the correct error response is returned.
+    All fields should be sorted alphabetically in error message
 
-        Make sure to make requests with multiple fields missing!!
+    :return:
+    """
 
-        :return:
-        """
-        EXPECTED_ERROR_MESSAGE_TEMPLATE = 'Error: Missing Fields {}'
-
-        # example first test
+    def test_validation_of_missing_single_param(self):
         params = {
             'manufactured_date': '2015-08-02',
             'size': 'large',
@@ -50,18 +47,53 @@ class ValidationKoansTestCase(TestCase):
         self.assertEqual(
             response.content, EXPECTED_ERROR_MESSAGE_TEMPLATE.format('name'))
 
-    def test_validation_of_optional_params(self):
-        """
-        Add support to create_widget_view for a new parameter 'color'.
-        Add two segments to this test:
-        one that POSTs it to create_widget_view and asserts that a
-        `success` function is returned and another that doesn't
-        submit it and that asserts `success` is returned.
+    def test_validation_of_multiple_missing_params(self):
+        params = {
+            'manufactured_date': '2015-08-02',
+            'size': 'large',
+            }
+        response = self.client.post(
+            reverse('validation:create_widget'), params)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.content,
+            EXPECTED_ERROR_MESSAGE_TEMPLATE.format(
+                ','.join(['name', 'weight_lbs'])
+            )
+        )
 
-        :return:
-        """
-        self.fail()
+class ValidationOptionalParamsTestCase(TestCase):
+    """
+    Add support to create_widget_view for a new parameter 'color'.
 
+    :return:
+    """
+    def test_validation_optional_param_in_request(self):
+        params = {
+            'manufactured_date': '2015-08-02',
+            'size': 'large',
+            'weight_lbs': '200',
+            'name': 'widget',
+            'color': 'blue'
+        }
+        response = self.client.post(
+            reverse('validation:create_widget'), params)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content, 'success')
+
+    def test_validation_optional_param_missing(self):
+        params = {
+            'manufactured_date': '2015-08-02',
+            'size': 'large',
+            'weight_lbs': '200',
+            'name': 'widget',
+        }
+        response = self.client.post(
+            reverse('validation:create_widget'), params)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content, 'success')
+
+class ValidationUnicodeTestCase(TestCase):
     def test_unicode_conversion(self):
         """
         A client is sending iso-8859-2 strings but our application
@@ -78,9 +110,21 @@ class ValidationKoansTestCase(TestCase):
         data = {
             'messed_up_equation': messed_up
         }
-        import ipdb; ipdb.set_trace();
         response = self.client.post(reverse('validation:unicode_test'), data)
         self.assertEqual(correct_equation, response.content)
 
+class ValdationUTCConversionTestCase(TestCase):
     def test_utc_conversion(self):
-        self.fail()
+        """
+        Clients input their dates in 'US/Eastern' timezone.
+
+        Convert the user submitted time to UTC
+
+        :return:
+        """
+        post_data = {
+            'manufacture_datetime': '2014-02-01 00:11:01'
+        }
+        request = self.client.post(
+            reverse('validation:utc_conversion_test'), post_data)
+        self.assertEqual(request.content, '2014-02-01 05:11:01')
