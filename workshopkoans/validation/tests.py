@@ -73,11 +73,12 @@ class ValidationKoansTestCase(TestCase):
         :return:
         """
         correct_equation = u'\u2203y \u2200x \xac(x \u227a y)'.encode('utf-8')
-        # 'iso-8859-2'
+        # mis-encoded to 'iso-8859-2'
         messed_up = u'\xe2\x88\x83y \xe2\x88\x80x \xc2\u0179(x \xe2\x89\u015f y)'
         data = {
             'messed_up_equation': messed_up
         }
+        import ipdb; ipdb.set_trace();
         response = self.client.post(reverse('validation:unicode_test'), data)
         self.assertEqual(correct_equation, response.content)
 

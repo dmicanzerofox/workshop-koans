@@ -1,5 +1,7 @@
 from django.test import TestCase
 from .dependency_injection_refactor import PeopleRetriever, BackendBase
+from designpatterns.encapsulation_design_pattern import Account, \
+    InsufficientFundsException
 from .extract_superclass_refactor import pay_worker
 from .object_composition_design_pattern import \
     Airplane, REALLY_COMPLICATED_FLIGHT, Bird, Duck, Eagle
@@ -51,8 +53,54 @@ class DesignPatternsRefactoringTestCase(TestCase):
         """
         eagle = Eagle()
         airplane = Airplane()
-        airplane.flyer == eagle.flyer
+        self.assertEqual(airplane.flyer, eagle.flyer)
         self.assertEqual(airplane.fly(), REALLY_COMPLICATED_FLIGHT)
 
     def test_encapsulation_design_pattern(self):
-        self.fail()
+        """
+        We're building a bank!  Create a class that supports account
+        operations that we will make available to our branches, online
+        and ATM's:
+
+        every account should be responsible for a single balance
+
+        There should be two operations available for an account:
+        get_balance
+        withdraw
+        deposit
+        transfer
+
+        (Pretend that it's not unpythonic to use getters/setters :))
+
+        :return:
+        """
+        account = Account()
+        self.assertEqual(account.get_balance(), 0)
+
+        account.deposit(10)
+
+        self.assertEqual(account.get_balance(), 10)
+
+        account.withdraw(10)
+        self.assertEqual(account.get_balance(), 0)
+
+        with self.assertRaises(InsufficientFundsException):
+            account.withdraw(100)
+
+        account.deposit(100)
+        savings_account = Account()
+        account.transfer(100, savings_account)
+
+        self.assertEqual(account.get_balance(), 0)
+
+        self.assertEqual(savings_account.get_balance(), 100)
+
+        """
+        self.assertEqual(
+            account.transaction_log,
+            [0, 10, -10, 100, -100]
+        )
+
+        Define `get_balance` in terms of the transaction log
+        """
+        self.assertEqual(account.get_balance(), 0)
