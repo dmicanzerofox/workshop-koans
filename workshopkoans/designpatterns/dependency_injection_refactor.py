@@ -8,7 +8,6 @@ class BackendBase(object):
     """
     PEOPLE_LIST = (
         {'name': 'Tom', 'age': 50},
-        {'name': 'Jane', 'age': 50}
     )
     def get_people(self):
         return self.PEOPLE_LIST
@@ -16,12 +15,17 @@ class BackendBase(object):
 
 class MySQLDbBackend(BackendBase):
     def get_people(self):
-        print('NETWORK CALL WOULD BE MOCKED')
+        print('MYSQL SPECIFIC NETWORK CALL - WOULD BE MOCKED')
         return super(MySQLDbBackend, self).get_people()
 
 
 class MongoDbBackend(BackendBase):
-    pass
+    PEOPLE_LIST = (
+        {'name': 'Mongo', 'age': 1},
+    )
+    def get_people(self):
+        print('MONGO SPECIFIC NETWORK CALL - WOULD BE MOCKED')
+        return super(MongoDbBackend, self).get_people()
 
 
 class PeopleRetriever(object):

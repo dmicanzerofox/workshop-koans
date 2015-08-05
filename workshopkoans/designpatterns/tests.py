@@ -4,7 +4,7 @@ from designpatterns.encapsulation_design_pattern import Account, \
     InsufficientFundsException
 from .extract_superclass_refactor import pay_worker
 from .object_composition_design_pattern import \
-    Airplane, REALLY_COMPLICATED_FLIGHT, Bird, Duck, Eagle
+    Airplane, REALLY_COMPLICATED_FLIGHT, Bird, Duck, Eagle, AutomatedFlight
 
 
 class DesignPatternsRefactoringTestCase(TestCase):
@@ -20,22 +20,25 @@ class DesignPatternsRefactoringTestCase(TestCase):
 
         :return:
         """
+        # modify this class to allow it to be billed by `pay_worker`
         class IndependentContractor(object):
             pass
-        contractor = IndependentContractor()
+        contractor = IndependentContractor(rate=10, hours=10)
         pay_worker(contractor)
 
     def test_dependency_injection_refactor(self):
         """
         Currently we have a people retriever that instantiates a mysql
-        connection in it's constructor. Refactor PeopleRetriever
+        connection in it's constructor.  Refactor PeopleRetriever
         to allow us to initialize it with any BackendBase class.
 
         :return:
         """
         class MockDbBackend(BackendBase):
             pass
-        retriever = PeopleRetriever()
+
+        mock_backend = MockDbBackend()
+        retriever = PeopleRetriever(mock_backend)
         self.assertIsInstance(retriever.connection, MockDbBackend)
         self.assertEqual(retriever.get_people(), BackendBase.PEOPLE_LIST)
 
@@ -49,11 +52,18 @@ class DesignPatternsRefactoringTestCase(TestCase):
         to power their airplanes.  Apply object composition
         to accomplish this.
 
+        Airplanes and birds should accept a flyable instance in their constructor
+        which should be assigned to their `flight` attribute.
+
+        Birds and airplanes should delegate their public `fly` method
+        to their `flight` attribute.
+
         :return:
         """
-        eagle = Eagle()
-        airplane = Airplane()
-        self.assertEqual(airplane.flyer, eagle.flyer)
+        flight = AutomatedFlight()
+        eagle = Eagle(flight)
+        airplane = Airplane(flight)
+        self.assertEqual(airplane.flight, eagle.flight)
         self.assertEqual(airplane.fly(), REALLY_COMPLICATED_FLIGHT)
 
     def test_encapsulation_design_pattern(self):

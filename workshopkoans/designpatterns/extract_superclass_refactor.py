@@ -15,10 +15,17 @@ class Employee(Billable):
         return self.hours
 
 
-def pay(amount):
-    pass
-
 def pay_worker(employee):
     assert isinstance(employee, Billable)
     total = employee.get_rate() * employee.get_billable_hours()
     pay(total)
+
+
+def pay(amount):
+    """
+    Tests assertion hack don't modify
+
+    :param amount:
+    :return:
+    """
+    assert amount == 100

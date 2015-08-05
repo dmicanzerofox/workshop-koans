@@ -3,6 +3,16 @@
 REALLY_COMPLICATED_FLIGHT = 'really complicated flight'
 
 
+class Flyable(object):
+    def fly(self):
+        raise NotImplementedError()
+
+
+class AutomatedFlight(Flyable):
+    def fly(self):
+        return REALLY_COMPLICATED_FLIGHT
+
+
 class Bird(object):
     def fly(self):
         """
