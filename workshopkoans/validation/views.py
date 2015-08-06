@@ -12,12 +12,16 @@ def create_widget_view(request):
         'weight_lbs',
         'manufactured_date',
     )
+
+    # MODIFY BLOCK
+
     name = request.POST['name']
     size = request.POST['size']
     weight_lbs = request.POST['weight_lbs']
     manufactured_date = request.POST['manufactured_date']
 
-    # YOUR CODE HERE
+    # MODIFY BLOCK END
+
 
     return HttpResponse(
         _create_widget(name, size, weight_lbs, manufactured_date)
