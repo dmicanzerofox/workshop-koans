@@ -51,6 +51,15 @@ def _create_widget(name, size, weight_lbs, manufactured_date, color=None):
 
 
 def unicode_test(request):
+    """
+    messed_up_equation should always be unicode when we access it
+    here.  It will be encoding using iso-8859-2 character set which is
+    incorrect,
+
+    HINT:
+    `encode` to a bytestring using the known encoding
+    `decode` to utf-8 :)
+    """
     equation = request.POST['messed_up_equation']
     # convert the iso-8859-2 string to utf-8
     return HttpResponse(equation)
