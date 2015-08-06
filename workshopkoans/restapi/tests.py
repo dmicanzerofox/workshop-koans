@@ -6,9 +6,9 @@ from django.test import TestCase
 class APIMoneyadderTestCase(TestCase):
     """
     Create an API endpoint that can add an arbitrary number of
-    decimals and return their sum.
+    floats and return their sum.
 
-    Data will be encoding as JSON and posted to the endpoint.
+    Data will be posted to the endpoint.
 
     All responses should be returned as JSON.
 
@@ -27,8 +27,9 @@ class APIMoneyadderTestCase(TestCase):
     - no numbers present
     - invalid number types
 
-    Try to write tests first, first test should be completely filled
-    out.
+    Try to write tests first.
+
+    This first test is an example, should be complete.
     """
     def test_moneyadder_multiple_numbers(self):
         numbers = [2.50, 1.75]
@@ -52,7 +53,7 @@ class APIMoneyadderTestCase(TestCase):
     def test_moneyadder_single_number_returns_itself(self):
         self.fail()
 
-    def test_moneyadder_malformed_json(self):
+    def test_moneyadder_malformed_request(self):
         self.fail()
 
     def test_moneyadder_invalid_number_types(self):
