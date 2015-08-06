@@ -74,7 +74,7 @@ class DesignPatternsRefactoringTestCase(TestCase):
 
         every account should be responsible for a single balance
 
-        There should be two operations available for an account:
+        There should be a couple operations available for an account:
         get_balance
         withdraw
         deposit

@@ -123,7 +123,7 @@ class ValdationUTCConversionTestCase(TestCase):
         :return:
         """
         post_data = {
-            'manufacture_datetime': '2014-02-01 00:11:01'
+            'manufactured_datetime': '2014-02-01 00:11:01'
         }
         request = self.client.post(
             reverse('validation:utc_conversion_test'), post_data)
